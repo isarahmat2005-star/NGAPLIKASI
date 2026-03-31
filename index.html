@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>COLINKS by IRS</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech&display=swap" rel="stylesheet">
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         :root {
             --primary: #2563eb;
             --success: #22c55e;
+            --danger: #ef4444;
             --bg-body: #f0f2f5;
             --card-bg: #ffffff;
             --border: #d1d5db;
@@ -87,84 +87,74 @@
             align-items: center;
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
+
+        /* --- ANIMASI SVG KARAKTER --- */
+        .anim-container {
+            width: 200px;
+            height: 180px;
+            margin-bottom: -10px; 
+            position: relative;
+            z-index: 2;
+        }
+        .svg-character { width: 100%; height: 100%; overflow: visible; transition: transform 0.3s ease; }
+        #head, #body-part, #hand { transition: fill 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #eyes circle { transition: transform 0.2s ease, ry 0.2s ease; }
+        #eyebrows line { transition: transform 0.3s ease; transform-origin: center; }
+        #mouth { transition: d 0.3s ease, fill 0.3s ease; }
+        #error-text, #hand-group { opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; }
+
+        /* SVG States */
+        .state-idle #character-group { transform: translateY(50px); }
+        .state-idle .eye { animation: blink 4s infinite; }
+        .state-idle #mouth { d: path("M 85 110 Q 100 110 115 110"); }
         
-        .emoji-display {
-            font-size: 80px;
-            margin-bottom: 20px;
-            display: inline-block;
-        }
-        .anim-idle { animation: floatEmoji 2.5s infinite ease-in-out; }
-        .anim-error { animation: shakeEmoji 0.4s ease-in-out; }
-        .anim-success { animation: popEmoji 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        
-        @keyframes floatEmoji {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-        @keyframes shakeEmoji {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-15px) rotate(-10deg); }
-            40%, 80% { transform: translateX(15px) rotate(10deg); }
-        }
-        @keyframes popEmoji {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.5); }
-            100% { transform: scale(1.2); }
-        }
+        .state-error #character-group { transform: translateY(0); }
+        .state-error #head, .state-error #hand-color { fill: var(--danger); }
+        .state-error .brow-l { transform: rotate(25deg) translateY(5px); }
+        .state-error .brow-r { transform: rotate(-25deg) translateY(5px); }
+        .state-error #mouth { d: path("M 85 115 Q 100 100 115 115"); } 
+        .state-error #error-text { opacity: 1; transform: translateY(-10px); }
+        .state-error #hand-group { opacity: 1; transform: translateY(-20px) translateX(-20px); }
+        .state-error.shake-anim { animation: shakeBox 0.4s ease-in-out; }
+
+        .state-success #character-group { transform: translateY(0); }
+        .state-success #head { fill: var(--success); }
+        .state-success .brow-l { transform: translateY(-5px); }
+        .state-success .brow-r { transform: translateY(-5px); }
+        .state-success .eye { rx: 5; ry: 2; transform: translateY(-2px); }
+        .state-success #mouth { d: path("M 80 105 Q 100 130 120 105"); fill: white; }
+
+        @keyframes blink { 0%, 96%, 100% { transform: scaleY(1); } 98% { transform: scaleY(0.1); } }
+        @keyframes shakeBox { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
 
         .passcode-box {
             background: var(--card-bg);
-            padding: 30px;
+            padding: 30px 25px;
             border: 2px solid var(--border);
             border-radius: 0; /* UJUNG LANCIP */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
             display: flex;
             flex-direction: column;
             gap: 15px;
-            width: 300px;
+            width: 100%;
+            max-width: 320px;
+            position: relative;
+            z-index: 3;
+            box-sizing: border-box;
         }
         
-        /* Gaya untuk pemisah "ATAU" */
-        .divider-container {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            margin: 5px 0;
-        }
-        .divider-line {
-            flex-grow: 1;
-            height: 2px;
-            background-color: var(--border);
-        }
-        .divider-text {
-            padding: 0 10px;
-            color: var(--text);
-            font-weight: bold;
-            font-size: 14px;
-            opacity: 0.6;
-        }
-
-        /* Container tombol Google Login */
-        .google-login-wrapper {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
+        .box-title { text-align: center; color: var(--primary); margin: 0 0 5px 0; font-size: 24px; letter-spacing: 2px; text-transform: uppercase; }
 
         .passcode-input {
-            width: 100%; padding: 12px;
-            background: var(--input-bg); border: 2px solid var(--border);
-            color: var(--text); font-family: 'Share Tech', sans-serif;
-            font-size: 18px; text-align: center; border-radius: 0; /* UJUNG LANCIP */
-            box-sizing: border-box; outline: none; transition: all 0.3s;
+            width: 100%; padding: 12px; background: var(--input-bg); border: 2px solid var(--border);
+            color: var(--text); font-family: 'Share Tech', sans-serif; font-size: 16px; text-align: center; 
+            border-radius: 0; box-sizing: border-box; outline: none; transition: all 0.3s; height: 45px;
         }
         .passcode-input:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
         
         .btn-passcode {
-            background: var(--primary); color: white;
-            border: none; padding: 12px; font-size: 18px; /* UKURAN FONT DISAMAKAN */
-            font-family: 'Share Tech', sans-serif; font-weight: bold;
-            cursor: pointer; border-radius: 0; /* UJUNG LANCIP */
+            background: var(--primary); color: white; border: none; padding: 12px; font-size: 16px; height: 45px;
+            font-family: 'Share Tech', sans-serif; font-weight: bold; cursor: pointer; border-radius: 0;
             box-shadow: 0 4px 0 rgba(0,0,0,0.2); transition: all 0.1s;
         }
         .btn-passcode:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
@@ -180,42 +170,25 @@
             position: relative;
             z-index: 5;
             display: none; /* Disembunyikan sampai passcode benar */
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
         .title-card {
             background-color: var(--card-bg);
-            width: 100%;
-            padding: 20px 0; /* Tinggi Judul Ditambahkan */
-            border-radius: 0; /* UJUNG LANCIP */
-            border: 2px solid var(--border);
+            width: 100%; padding: 20px 0;
+            border-radius: 0; border: 2px solid var(--border);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
         }
-
-        .title-card h1 {
-            margin: 0;
-            color: var(--primary);
-            font-size: 50px;
-            font-weight: 1000;
-            letter-spacing: 8px;
-            text-transform: uppercase;
-            line-height: 1;
-        }
+        .title-card h1 { margin: 0; color: var(--primary); font-size: 50px; font-weight: 1000; letter-spacing: 8px; text-transform: uppercase; line-height: 1; }
 
         .container {
             background-color: var(--card-bg);
-            width: 100%;
-            height: 590px; /* Tinggi Kembali Awal */
-            padding: 25px;
-            border-radius: 0; /* UJUNG LANCIP */
-            border: 2px solid var(--border);
+            width: 100%; height: 590px; padding: 25px;
+            border-radius: 0; border: 2px solid var(--border);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            display: flex;
-            flex-direction: column;
-            box-sizing: border-box;
-            position: relative;
+            display: flex; flex-direction: column; box-sizing: border-box; position: relative;
         }
 
         .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
@@ -223,24 +196,19 @@
 
         .btn-nav-icon {
             background: var(--primary); color: white !important; border: none; 
-            width: 40px; height: 40px; /* Diperbesar sedikit agar presisi */
-            border-radius: 0; /* UJUNG LANCIP / PERSEGI */
+            width: 40px; height: 40px; border-radius: 0; 
             cursor: pointer; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 3px 0 rgba(0,0,0,0.2); text-decoration: none;
-            transition: all 0.1s;
+            box-shadow: 0 3px 0 rgba(0,0,0,0.2); text-decoration: none; transition: all 0.1s;
         }
         .btn-nav-icon:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.2); }
 
         .theme-menu {
             position: absolute; top: 50px; right: 0; background: var(--card-bg);
-            border: 2px solid var(--border); border-radius: 0; /* UJUNG LANCIP */
+            border: 2px solid var(--border); border-radius: 0; 
             box-shadow: 0 5px 15px rgba(0,0,0,0.2); display: none; flex-direction: column; 
             z-index: 100; width: 200px; max-height: 280px; overflow-y: auto;
         }
-        .theme-opt {
-            padding: 12px 15px; cursor: pointer; font-size: 11px; border-bottom: 1px solid var(--border);
-            background: var(--card-bg); color: var(--text); font-weight: bold; text-transform: uppercase;
-        }
+        .theme-opt { padding: 12px 15px; cursor: pointer; font-size: 11px; border-bottom: 1px solid var(--border); background: var(--card-bg); color: var(--text); font-weight: bold; text-transform: uppercase; }
         .theme-opt:hover { background: var(--primary); color: white; }
 
         /* --- TABS --- */
@@ -251,136 +219,69 @@
         .btn-tab {
             background: var(--input-bg); border: 2px solid var(--border); font-family: 'Share Tech', sans-serif;
             font-size: 13px; font-weight: bold; color: var(--text); cursor: pointer; padding: 10px 15px;
-            border-radius: 0; /* UJUNG LANCIP */
-            box-shadow: 0 3px 0 var(--border); transition: all 0.1s; text-transform: uppercase;
+            border-radius: 0; box-shadow: 0 3px 0 var(--border); transition: all 0.1s; text-transform: uppercase;
         }
-        .btn-tab.active { 
-            color: white !important; background: var(--primary); 
-            border-color: var(--primary); box-shadow: 0 3px 0 rgba(0,0,0,0.2); 
-            transform: translateY(-2px); 
-        }
+        .btn-tab.active { color: white !important; background: var(--primary); border-color: var(--primary); box-shadow: 0 3px 0 rgba(0,0,0,0.2); transform: translateY(-2px); }
 
         /* AREA DAFTAR LINK */
         .link-list-container {
-            flex-grow: 1;
-            background: var(--input-bg);
-            border: 2px solid var(--border);
-            border-radius: 0; /* UJUNG LANCIP */
-            padding: 15px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+            flex-grow: 1; background: var(--input-bg); border: 2px solid var(--border);
+            border-radius: 0; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px;
         }
-
         .link-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--card-bg);
-            border: 2px solid var(--border);
-            padding: 12px 15px;
-            border-radius: 0; /* UJUNG LANCIP */
-            box-shadow: 0 3px 0 var(--border);
-            transition: all 0.2s ease;
+            display: flex; justify-content: space-between; align-items: center; background: var(--card-bg);
+            border: 2px solid var(--border); padding: 12px 15px; border-radius: 0;
+            box-shadow: 0 3px 0 var(--border); transition: all 0.2s ease;
         }
-
-        .link-item:hover {
-            border-color: var(--primary);
-            box-shadow: 0 3px 0 var(--primary);
-            transform: translateY(-2px);
-        }
-
-        .link-info {
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            padding-right: 15px;
-        }
-
-        .link-title {
-            font-weight: bold;
-            font-size: 16px;
-            color: var(--text);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-bottom: 2px;
-        }
-
-        .link-url {
-            font-size: 12px;
-            color: var(--text);
-            opacity: 0.7;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
+        .link-item:hover { border-color: var(--primary); box-shadow: 0 3px 0 var(--primary); transform: translateY(-2px); }
+        .link-info { display: flex; flex-direction: column; overflow: hidden; padding-right: 15px; }
+        .link-title { font-weight: bold; font-size: 16px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 2px; }
+        .link-url { font-size: 12px; color: var(--text); opacity: 0.7; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .btn-open {
-            background: var(--primary);
-            color: white;
-            border: none;
-            width: 42px; 
-            height: 42px; 
-            border-radius: 0; /* UJUNG LANCIP */
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            box-shadow: 0 3px 0 rgba(0,0,0,0.2);
-            transition: all 0.1s;
+            background: var(--primary); color: white; border: none; width: 42px; height: 42px; 
+            border-radius: 0; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; box-shadow: 0 3px 0 rgba(0,0,0,0.2); transition: all 0.1s;
         }
-        .btn-open:active {
-            transform: translateY(2px);
-            box-shadow: 0 1px 0 rgba(0,0,0,0.2);
-        }
-        
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-body); border-radius: 0; }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 0; border: 1px solid var(--border); }
+        .btn-open:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-track { background: var(--bg-body); border-radius: 0; } ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 0; border: 1px solid var(--border); }
     </style>
 </head>
 <body class="light-clean">
 
     <div id="lockScreen" class="lock-screen">
-        <div id="emojiDisplay" class="emoji-display anim-idle">👀</div>
+        <div class="anim-container">
+            <svg viewBox="0 0 200 180" class="svg-character state-idle" id="svgAnim">
+                <text id="error-text" x="100" y="30" text-anchor="middle" fill="var(--danger)" font-family="Share Tech" font-size="22" font-weight="bold" letter-spacing="1">KAMU SIAPA?!</text>
+                <g id="character-group">
+                    <circle cx="100" cy="100" r="45" fill="var(--primary)" id="head"/>
+                    <g id="face">
+                        <g id="eyes">
+                            <ellipse cx="82" cy="90" rx="5" ry="5" fill="#fff" class="eye"/>
+                            <ellipse cx="118" cy="90" rx="5" ry="5" fill="#fff" class="eye"/>
+                        </g>
+                        <g id="eyebrows" stroke="#fff" stroke-width="3" stroke-linecap="square">
+                            <line x1="72" y1="78" x2="92" y2="78" class="brow-l"/>
+                            <line x1="108" y1="78" x2="128" y2="78" class="brow-r"/>
+                        </g>
+                        <path id="mouth" d="M 85 110 Q 100 110 115 110" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    </g>
+                </g>
+                <rect x="0" y="140" width="200" height="40" fill="var(--card-bg)" stroke="var(--border)" stroke-width="4"/>
+                <g id="hand-group">
+                    <path d="M 120 180 L 160 140 L 175 145 L 130 190 Z" fill="var(--danger)" id="hand-color"/>
+                    <circle cx="168" cy="142" r="8" fill="var(--danger)"/>
+                </g>
+            </svg>
+        </div>
+
         <div class="passcode-box">
-            
-            <div class="google-login-wrapper">
-                <div id="g_id_onload"
-                     data-client_id="151782765319-5klk78b5lqrcnaaqqu7k0mqiqhbmonf1.apps.googleusercontent.com"
-                     data-context="signin"
-                     data-ux_mode="popup"
-                     data-callback="handleCredentialResponse"
-                     data-auto_prompt="false">
-                </div>
-                <div class="g_id_signin"
-                     data-type="standard"
-                     data-shape="rectangular"
-                     data-theme="outline"
-                     data-text="signin_with"
-                     data-size="large"
-                     data-logo_alignment="left"
-                     data-width="236">
-                </div>
-            </div>
-
-            <div class="divider-container">
-                <div class="divider-line"></div>
-                <div class="divider-text">ATAU</div>
-                <div class="divider-line"></div>
-            </div>
-
-            <input type="password" id="passcodeInput" class="passcode-input" placeholder="Masukkan Kode" onkeypress="handleEnter(event)">
-            <button class="btn-passcode" onclick="verifyCode()">BUKA BRANKAS</button>
+            <h2 class="box-title">BRANKAS</h2>
+            <input type="password" id="passcodeInput" class="passcode-input" placeholder="KODE RAHASIA" onkeypress="handleEnter(event)">
+            <button class="btn-passcode" onclick="verifyCode()">MASUK</button>
         </div>
     </div>
 
     <div class="main-wrapper" id="mainApp">
-        
         <div class="title-card">
             <h1>COLINKS</h1>
         </div>
@@ -458,9 +359,7 @@
                 </div>
             </div>
             
-            <div id="linkContainer" class="link-list-container">
-                </div>
-
+            <div id="linkContainer" class="link-list-container"></div>
         </div>
     </div>
 
@@ -468,37 +367,137 @@
     // ==============================================================================
     // [RUANG ISI LINK] - TARUH LINK ANDA DI BAWAH INI SESUAI KATEGORI!
     // ==============================================================================
-
-    // 1. ISI LINK UNTUK TAB "MATERI" DI SINI
     const linkMateri = [
         { name: "Contoh Materi 1", url: "https://contoh-materi.com" },
         { name: "Contoh Materi 2", url: "https://contoh-materi.com" }
     ];
-
-    // 2. ISI LINK UNTUK TAB "APLIKASI" DI SINI
     const linkAplikasi = [
         { name: "REFORNAM by IRS", url: "https://refornam.vercel.app/" }, 
         { name: "GETOCK by IRS", url: "https://getock.vercel.app/" }
     ];
-
-    // 3. ISI LINK UNTUK TAB "LAINNYA" DI SINI
     const linkLainnya = [
         { name: "Website Lain 1", url: "https://google.com" }
     ];
-
-    // ==============================================================================
-    // (JANGAN UBAH KODE DI BAWAH INI KECUALI ANDA PAHAM JAVASCRIPT)
     // ==============================================================================
 
+
+    // ==============================================================================
+    // LOGIKA AUTO-LOGIN & RESET TENGAH MALAM
+    // ==============================================================================
+    const lockScreen = document.getElementById('lockScreen');
+    const mainApp = document.getElementById('mainApp');
+    const svgAnim = document.getElementById('svgAnim');
+    const PASSCODE_CORRECT = '0.Rahasia.0';
+
+    // Memeriksa status login saat halaman dimuat
+    function checkLoginStatus() {
+        const storedLogin = localStorage.getItem('colinks_auth');
+        
+        if (storedLogin) {
+            const data = JSON.parse(storedLogin);
+            const now = new Date().getTime();
+            
+            if (now < data.expiry) {
+                // Masih dalam masa aktif, langsung buka aplikasi
+                openMainApp(false); 
+                updateExpiryTime(); // Perpanjang masa aktif ke jam 00:00 besoknya
+            } else {
+                // Sudah lewat jam 00:00 dan baru dibuka lagi -> Reset
+                localStorage.removeItem('colinks_auth');
+            }
+        }
+    }
+
+    // Menghitung target waktu reset (Jam 00:00 hari berikutnya)
+    function getNextMidnight() {
+        const now = new Date();
+        const tomorrow = new Date(now);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0, 0, 0, 0); // Set ke jam 00:00:00 tepat
+        return tomorrow.getTime();
+    }
+
+    // Memperbarui atau menyimpan data login ke LocalStorage
+    function updateExpiryTime() {
+        const authData = {
+            isLoggedIn: true,
+            expiry: getNextMidnight()
+        };
+        localStorage.setItem('colinks_auth', JSON.stringify(authData));
+    }
+
+    // Memantau aktivitas pengguna (Jika sedang aktif saat jam 00:00 terlewati, otomatis perpanjang)
+    setInterval(() => {
+        const storedLogin = localStorage.getItem('colinks_auth');
+        if (storedLogin && mainApp.style.display === 'flex') {
+            const data = JSON.parse(storedLogin);
+            const now = new Date().getTime();
+            // Jika waktu saat ini sudah melebihi expiry TAPI user sedang aktif melihat aplikasi
+            if (now >= data.expiry) {
+                updateExpiryTime(); // Perpanjang tanpa memutus sesi
+            }
+        }
+    }, 60000); // Cek setiap 1 menit
+
+    // Jalankan pengecekan saat pertama dibuka
+    checkLoginStatus();
+
+
+    // --- LOGIKA PASSCODE & ANIMASI ---
+    function handleEnter(e) {
+        if (e.key === 'Enter') verifyCode();
+    }
+
+    function verifyCode() {
+        const inputVal = document.getElementById('passcodeInput').value;
+        if(inputVal === PASSCODE_CORRECT) {
+            updateExpiryTime(); // Simpan sesi login
+            triggerSuccessAnimation();
+        } else {
+            triggerErrorAnimation();
+        }
+    }
+
+    function triggerSuccessAnimation() {
+        svgAnim.className.baseVal = "svg-character state-success";
+        setTimeout(() => { openMainApp(true); }, 1000);
+    }
+
+    function openMainApp(withAnimation) {
+        if (withAnimation) {
+            lockScreen.style.transform = 'scale(1.2)';
+            lockScreen.style.opacity = '0';
+            setTimeout(() => {
+                lockScreen.style.display = 'none'; // <-- DIUBAH DARI visibility:hidden
+                mainApp.style.display = 'flex';
+                setTimeout(() => mainApp.style.opacity = '1', 50);
+                renderLinks();
+            }, 500);
+        } else {
+            // Langsung buka tanpa animasi (untuk auto-login saat refresh)
+            lockScreen.style.display = 'none';
+            mainApp.style.display = 'flex';
+            mainApp.style.opacity = '1';
+            renderLinks();
+        }
+    }
+
+    function triggerErrorAnimation() {
+        svgAnim.className.baseVal = "svg-character state-error shake-anim";
+        setTimeout(() => {
+            svgAnim.className.baseVal = "svg-character state-idle";
+            document.getElementById('passcodeInput').value = ''; 
+        }, 1500); 
+    }
+
+    // --- LOGIKA APLIKASI (TABS & RENDER LINK) ---
     let currentTab = 'materi';
 
     function switchTab(tabName) {
         currentTab = tabName;
-        // Update styling tombol
         document.getElementById('tab-materi').className = 'btn-tab ' + (tabName === 'materi' ? 'active' : '');
         document.getElementById('tab-aplikasi').className = 'btn-tab ' + (tabName === 'aplikasi' ? 'active' : '');
         document.getElementById('tab-lainnya').className = 'btn-tab ' + (tabName === 'lainnya' ? 'active' : '');
-        
         renderLinks();
     }
 
@@ -536,68 +535,9 @@
         });
     }
 
-    // --- LOGIKA GOOGLE LOGIN (BARU) ---
-    // Fungsi ini akan dipanggil otomatis oleh Google jika login berhasil
-    function handleCredentialResponse(response) {
-        if(response.credential) {
-            // Jika Anda ingin mengekstrak data nama/email dari token JWT, Anda perlu script tambahan.
-            // Untuk saat ini, asalkan responnya ada (login berhasil), kita buka aplikasinya.
-            triggerSuccessAnimation();
-        } else {
-            triggerErrorAnimation();
-        }
-    }
+    function openLink(url) { window.open(url, '_blank'); }
 
-    // --- LOGIKA PASSCODE & EMOJI ---
-    function handleEnter(e) {
-        if (e.key === 'Enter') verifyCode();
-    }
-
-    function verifyCode() {
-        const inputVal = document.getElementById('passcodeInput').value;
-        if(inputVal === '0.Rahasia.0') {
-            triggerSuccessAnimation();
-        } else {
-            triggerErrorAnimation();
-        }
-    }
-
-    function triggerSuccessAnimation() {
-        const emoji = document.getElementById('emojiDisplay');
-        const lockScreen = document.getElementById('lockScreen');
-        const mainApp = document.getElementById('mainApp');
-
-        emoji.innerText = '😎';
-        emoji.className = 'emoji-display anim-success';
-        
-        setTimeout(() => {
-            lockScreen.style.transform = 'scale(1.2)';
-            lockScreen.style.opacity = '0';
-            setTimeout(() => {
-                lockScreen.style.display = 'none';
-                mainApp.style.display = 'flex'; // Munculkan Aplikasi
-                renderLinks(); // Render saat pertama kali masuk
-            }, 500);
-        }, 800);
-    }
-
-    function triggerErrorAnimation() {
-        const emoji = document.getElementById('emojiDisplay');
-        emoji.innerText = '😡';
-        emoji.className = 'emoji-display anim-error';
-        
-        // Kembalikan ke emoji diam setelah marah selesai
-        setTimeout(() => {
-            emoji.innerText = '👀';
-            emoji.className = 'emoji-display anim-idle';
-            document.getElementById('passcodeInput').value = ''; // Reset input
-        }, 600);
-    }
-
-    function openLink(url) {
-        window.open(url, '_blank');
-    }
-
+    // --- UI TOOLS ---
     function toggleThemeMenu() { 
         const m = document.getElementById('themeMenu'); 
         m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; 
@@ -606,7 +546,14 @@
     function setTheme(t) { 
         document.body.className = t; 
         document.getElementById('themeMenu').style.display = 'none'; 
+        
+        // Simpan preferensi tema ke localStorage agar tidak reset
+        localStorage.setItem('colinks_theme', t);
     }
+
+    // Muat tema tersimpan
+    const savedTheme = localStorage.getItem('colinks_theme');
+    if(savedTheme) document.body.className = savedTheme;
 
     function updateClock() {
         const now = new Date();
