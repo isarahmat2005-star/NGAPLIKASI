@@ -85,54 +85,48 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            transition: opacity 0.5s ease, transform 0.5s ease, visibility 0.5s;
+            transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        /* --- ANIMASI SVG DRONE AI FUTURISTIK --- */
+        /* --- ANIMASI SVG KARAKTER --- */
         .anim-container {
-            width: 220px;
+            width: 200px;
             height: 180px;
             margin-bottom: -10px; 
             position: relative;
             z-index: 2;
         }
-        .svg-drone { width: 100%; height: 100%; overflow: visible; }
-        
-        #drone-group { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        #drone-shell { transition: stroke 0.3s ease; }
-        .led-scanner { transition: opacity 0.2s; animation: scan 1.2s infinite alternate ease-in-out; }
-        .led-angry, .led-happy { opacity: 0; transition: opacity 0.3s; }
-        #error-text, #drone-claw { opacity: 0; transition: opacity 0.3s, transform 0.3s; }
+        .svg-character { width: 100%; height: 100%; overflow: visible; transition: transform 0.3s ease; }
+        #head, #body-part, #hand { transition: fill 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #eyes circle { transition: transform 0.2s ease, ry 0.2s ease; }
+        #eyebrows line { transition: transform 0.3s ease; transform-origin: center; }
+        #mouth { transition: d 0.3s ease, fill 0.3s ease; }
+        #error-text, #hand-group { opacity: 0; transition: opacity 0.3s ease, transform 0.3s ease; }
 
-        @keyframes scan {
-            0% { transform: translateX(-15px); }
-            100% { transform: translateX(15px); }
-        }
-        @keyframes shakeBox { 
-            0%, 100% { transform: translateX(0); } 
-            20%, 60% { transform: translateX(-10px); } 
-            40%, 80% { transform: translateX(10px); } 
-        }
-
-        /* STATE: IDLE (Mengintip) */
-        .state-idle #drone-group { transform: translateY(45px); }
+        /* SVG States */
+        .state-idle #character-group { transform: translateY(50px); }
+        .state-idle .eye { animation: blink 4s infinite; }
+        .state-idle #mouth { d: path("M 85 110 Q 100 110 115 110"); }
         
-        /* STATE: ERROR (Marah & Menunjuk) */
-        .state-error #drone-group { transform: translateY(10px); }
-        .state-error #drone-shell { stroke: var(--danger); }
-        .state-error .led-scanner { opacity: 0; animation: none; }
-        .state-error .led-angry { opacity: 1; }
-        .state-error #error-text { opacity: 1; transform: translateY(-15px); }
-        .state-error #drone-claw { opacity: 1; transform: translateY(-20px) translateX(-15px); }
+        .state-error #character-group { transform: translateY(0); }
+        .state-error #head, .state-error #hand-color { fill: var(--danger); }
+        .state-error .brow-l { transform: rotate(25deg) translateY(5px); }
+        .state-error .brow-r { transform: rotate(-25deg) translateY(5px); }
+        .state-error #mouth { d: path("M 85 115 Q 100 100 115 115"); } 
+        .state-error #error-text { opacity: 1; transform: translateY(-10px); }
+        .state-error #hand-group { opacity: 1; transform: translateY(-20px) translateX(-20px); }
         .state-error.shake-anim { animation: shakeBox 0.4s ease-in-out; }
 
-        /* STATE: SUCCESS (Senang) */
-        .state-success #drone-group { transform: translateY(10px); }
-        .state-success #drone-shell { stroke: var(--success); }
-        .state-success .led-scanner { opacity: 0; animation: none; }
-        .state-success .led-happy { opacity: 1; }
+        .state-success #character-group { transform: translateY(0); }
+        .state-success #head { fill: var(--success); }
+        .state-success .brow-l { transform: translateY(-5px); }
+        .state-success .brow-r { transform: translateY(-5px); }
+        .state-success .eye { rx: 5; ry: 2; transform: translateY(-2px); }
+        .state-success #mouth { d: path("M 80 105 Q 100 130 120 105"); fill: white; }
 
-        /* --- KOTAK INPUT LOGIN --- */
+        @keyframes blink { 0%, 96%, 100% { transform: scaleY(1); } 98% { transform: scaleY(0.1); } }
+        @keyframes shakeBox { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-10px); } 40%, 80% { transform: translateX(10px); } }
+
         .passcode-box {
             background: var(--card-bg);
             padding: 30px 25px;
@@ -161,7 +155,7 @@
         .btn-passcode {
             background: var(--primary); color: white; border: none; padding: 12px; font-size: 16px; height: 45px;
             font-family: 'Share Tech', sans-serif; font-weight: bold; cursor: pointer; border-radius: 0;
-            box-shadow: 0 4px 0 rgba(0,0,0,0.2); transition: all 0.1s; text-transform: uppercase;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2); transition: all 0.1s;
         }
         .btn-passcode:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
 
@@ -172,10 +166,10 @@
             align-items: center;
             width: 100%;
             max-width: 600px;
-            gap: 10px;
+            gap: 10px; /* Jarak antara judul dan kotak utama */
             position: relative;
             z-index: 5;
-            display: none; 
+            display: none; /* Disembunyikan sampai passcode benar */
             opacity: 0;
             transition: opacity 0.5s ease;
         }
@@ -256,37 +250,26 @@
 
     <div id="lockScreen" class="lock-screen">
         <div class="anim-container">
-            <svg viewBox="0 0 200 180" class="svg-drone state-idle" id="svgAnim">
-                <text id="error-text" x="100" y="30" text-anchor="middle" fill="var(--danger)" font-family="Share Tech" font-size="24" font-weight="bold" letter-spacing="1">KAMU SIAPA?!</text>
-
-                <g id="drone-group">
-                    <polygon points="100,50 150,75 135,130 65,130 50,75" fill="var(--card-bg)" stroke="var(--primary)" stroke-width="4" id="drone-shell"/>
-                    
-                    <polygon points="100,62 135,82 122,120 78,120 65,82" fill="#111827"/>
-                    
-                    <g id="bot-face">
-                        <rect x="90" y="95" width="20" height="6" fill="var(--primary)" class="led-scanner"/>
-                        
-                        <g class="led-angry" stroke="var(--danger)" stroke-width="5" stroke-linecap="square">
-                            <line x1="75" y1="85" x2="95" y2="105"/>
-                            <line x1="95" y1="85" x2="75" y2="105"/>
-                            <line x1="125" y1="85" x2="105" y2="105"/>
-                            <line x1="105" y1="85" x2="125" y2="105"/>
+            <svg viewBox="0 0 200 180" class="svg-character state-idle" id="svgAnim">
+                <text id="error-text" x="100" y="30" text-anchor="middle" fill="var(--danger)" font-family="Share Tech" font-size="22" font-weight="bold" letter-spacing="1">KAMU SIAPA?!</text>
+                <g id="character-group">
+                    <circle cx="100" cy="100" r="45" fill="var(--primary)" id="head"/>
+                    <g id="face">
+                        <g id="eyes">
+                            <ellipse cx="82" cy="90" rx="5" ry="5" fill="#fff" class="eye"/>
+                            <ellipse cx="118" cy="90" rx="5" ry="5" fill="#fff" class="eye"/>
                         </g>
-
-                        <g class="led-happy" stroke="var(--success)" stroke-width="5" stroke-linecap="square" fill="none">
-                            <polyline points="75,100 85,85 95,100"/>
-                            <polyline points="105,100 115,85 125,100"/>
+                        <g id="eyebrows" stroke="#fff" stroke-width="3" stroke-linecap="square">
+                            <line x1="72" y1="78" x2="92" y2="78" class="brow-l"/>
+                            <line x1="108" y1="78" x2="128" y2="78" class="brow-r"/>
                         </g>
+                        <path id="mouth" d="M 85 110 Q 100 110 115 110" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>
                     </g>
                 </g>
-
                 <rect x="0" y="140" width="200" height="40" fill="var(--card-bg)" stroke="var(--border)" stroke-width="4"/>
-
-                <g id="drone-claw">
-                    <polygon points="120,190 150,140 165,145 130,195" fill="var(--input-bg)" stroke="var(--danger)" stroke-width="3"/>
-                    <polygon points="160,145 180,125 185,132 165,155" fill="var(--danger)"/>
-                    <polygon points="165,150 175,140 180,145 165,155" fill="var(--danger)"/>
+                <g id="hand-group">
+                    <path d="M 120 180 L 160 140 L 175 145 L 130 190 Z" fill="var(--danger)" id="hand-color"/>
+                    <circle cx="168" cy="142" r="8" fill="var(--danger)"/>
                 </g>
             </svg>
         </div>
@@ -294,7 +277,7 @@
         <div class="passcode-box">
             <h2 class="box-title">BRANKAS</h2>
             <input type="password" id="passcodeInput" class="passcode-input" placeholder="KODE RAHASIA" onkeypress="handleEnter(event)">
-            <button class="btn-passcode" onclick="verifyCode()">BUKA BRANKAS</button>
+            <button class="btn-passcode" onclick="verifyCode()">MASUK</button>
         </div>
     </div>
 
@@ -415,9 +398,11 @@
             const now = new Date().getTime();
             
             if (now < data.expiry) {
+                // Masih dalam masa aktif, langsung buka aplikasi
                 openMainApp(false); 
-                updateExpiryTime();
+                updateExpiryTime(); // Perpanjang masa aktif ke jam 00:00 besoknya
             } else {
+                // Sudah lewat jam 00:00 dan baru dibuka lagi -> Reset
                 localStorage.removeItem('colinks_auth');
             }
         }
@@ -428,7 +413,7 @@
         const now = new Date();
         const tomorrow = new Date(now);
         tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(0, 0, 0, 0); 
+        tomorrow.setHours(0, 0, 0, 0); // Set ke jam 00:00:00 tepat
         return tomorrow.getTime();
     }
 
@@ -447,12 +432,14 @@
         if (storedLogin && mainApp.style.display === 'flex') {
             const data = JSON.parse(storedLogin);
             const now = new Date().getTime();
+            // Jika waktu saat ini sudah melebihi expiry TAPI user sedang aktif melihat aplikasi
             if (now >= data.expiry) {
-                updateExpiryTime(); 
+                updateExpiryTime(); // Perpanjang tanpa memutus sesi
             }
         }
     }, 60000); // Cek setiap 1 menit
 
+    // Jalankan pengecekan saat pertama dibuka
     checkLoginStatus();
 
 
@@ -464,7 +451,7 @@
     function verifyCode() {
         const inputVal = document.getElementById('passcodeInput').value;
         if(inputVal === PASSCODE_CORRECT) {
-            updateExpiryTime(); 
+            updateExpiryTime(); // Simpan sesi login
             triggerSuccessAnimation();
         } else {
             triggerErrorAnimation();
@@ -472,7 +459,7 @@
     }
 
     function triggerSuccessAnimation() {
-        svgAnim.className.baseVal = "svg-drone state-success";
+        svgAnim.className.baseVal = "svg-character state-success";
         setTimeout(() => { openMainApp(true); }, 1000);
     }
 
@@ -481,12 +468,13 @@
             lockScreen.style.transform = 'scale(1.2)';
             lockScreen.style.opacity = '0';
             setTimeout(() => {
-                lockScreen.style.display = 'none'; 
+                lockScreen.style.display = 'none'; // <-- DIUBAH DARI visibility:hidden
                 mainApp.style.display = 'flex';
                 setTimeout(() => mainApp.style.opacity = '1', 50);
                 renderLinks();
             }, 500);
         } else {
+            // Langsung buka tanpa animasi (untuk auto-login saat refresh)
             lockScreen.style.display = 'none';
             mainApp.style.display = 'flex';
             mainApp.style.opacity = '1';
@@ -495,9 +483,9 @@
     }
 
     function triggerErrorAnimation() {
-        svgAnim.className.baseVal = "svg-drone state-error shake-anim";
+        svgAnim.className.baseVal = "svg-character state-error shake-anim";
         setTimeout(() => {
-            svgAnim.className.baseVal = "svg-drone state-idle";
+            svgAnim.className.baseVal = "svg-character state-idle";
             document.getElementById('passcodeInput').value = ''; 
         }, 1500); 
     }
@@ -558,9 +546,12 @@
     function setTheme(t) { 
         document.body.className = t; 
         document.getElementById('themeMenu').style.display = 'none'; 
+        
+        // Simpan preferensi tema ke localStorage agar tidak reset
         localStorage.setItem('colinks_theme', t);
     }
 
+    // Muat tema tersimpan
     const savedTheme = localStorage.getItem('colinks_theme');
     if(savedTheme) document.body.className = savedTheme;
 
