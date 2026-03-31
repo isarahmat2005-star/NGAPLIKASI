@@ -72,41 +72,6 @@
             overflow-x: hidden;
         }
 
-        /* --- CAHAYA LATAR BERGERAK (AMBIENT GLOW) --- */
-        .ambient-glow {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            z-index: 0;
-            pointer-events: none;
-            overflow: hidden;
-        }
-        .ambient-glow::before, .ambient-glow::after {
-            content: '';
-            position: absolute;
-            width: 60vw; height: 60vw;
-            background: var(--primary);
-            filter: blur(120px);
-            opacity: 0.15;
-            transition: background 1.5s ease;
-        }
-        .ambient-glow::before {
-            top: -20%; left: -10%;
-            animation: floatGlow 15s infinite alternate ease-in-out;
-        }
-        .ambient-glow::after {
-            bottom: -20%; right: -10%;
-            animation: floatGlowReverse 20s infinite alternate ease-in-out;
-        }
-        @keyframes floatGlow {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(20%, 20%) scale(1.2); }
-        }
-        @keyframes floatGlowReverse {
-            0% { transform: translate(0, 0) scale(1.2); }
-            100% { transform: translate(-20%, -20%) scale(1); }
-        }
-
         /* --- LAYAR KUNCI (PASSCODE) --- */
         .lock-screen {
             position: fixed;
@@ -202,7 +167,7 @@
         .title-card h1 {
             margin: 0;
             color: var(--primary);
-            font-size: 44px;
+            font-size: 60px;
             font-weight: 1000;
             letter-spacing: 8px;
             text-transform: uppercase;
@@ -349,8 +314,6 @@
     </style>
 </head>
 <body class="light-clean">
-
-    <div class="ambient-glow"></div>
 
     <div id="lockScreen" class="lock-screen">
         <div id="emojiDisplay" class="emoji-display anim-idle">👀</div>
