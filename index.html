@@ -14,12 +14,10 @@
             --border: #d1d5db;
             --text: #1f2937;
             --input-bg: #ffffff;
-            --log-bg: #111827;
-            --log-text: #60a5fa;
             --grid-color: rgba(37, 99, 235, 0.1);
         }
 
-        /* Variasi Tema Lengkap dari kode asli */
+        /* 36 Variasi Tema Lengkap */
         body.light-clean { --primary: #2563eb; --bg-body: #f0f2f5; --card-bg: #ffffff; --text: #1f2937; --input-bg: #ffffff; --border: #d1d5db; }
         body.luxury-gold { --primary: #d4af37; --bg-body: #1a1a1a; --card-bg: #2d2d2d; --text: #d4af37; --input-bg: #3d3d3d; --border: #d4af37; }
         body.dark-pro { --primary: #3b82f6; --bg-body: #050505; --card-bg: #121212; --text: #e0e0e0; --input-bg: #1e1e1e; --border: #333; }
@@ -109,7 +107,7 @@
         .container {
             background-color: var(--card-bg);
             width: 100%;
-            height: 615px; /* Tinggi tetap sesuai aslinya */
+            height: 615px; /* Tinggi dipertahankan sesuai aslinya */
             padding: 25px;
             border-radius: 12px;
             border: 2px solid var(--border);
@@ -141,37 +139,28 @@
         }
         .theme-opt:hover { background: var(--primary); color: white; }
 
-        .input-group { margin-bottom: 12px; }
-        label { font-size: 13px; color: var(--primary); font-weight: bold; display: block; margin-bottom: 4px; }
-        
-        .input-field {
-            width: 100%; background: var(--input-bg); border: 1px solid var(--border); padding: 8px 12px;
-            color: var(--text); font-family: 'Share Tech', sans-serif; box-sizing: border-box;
-            border-radius: 8px; font-size: 14px; height: 40px; transition: all 0.3s ease;
-        }
-        .input-field:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 8px var(--primary); }
-
-        .action-bars { display: flex; gap: 10px; margin-bottom: 20px; margin-top: 5px; }
-        .btn-main { 
-            flex: 1; border: none; padding: 0; cursor: pointer; font-family: 'Share Tech', sans-serif; 
-            font-weight: bold; text-transform: uppercase; border-radius: 8px; font-size: 15px; position: relative;
-            height: 42px; display: flex; align-items: center; justify-content: center;
-            background: var(--primary); color: white; box-shadow: 0 4px 0 rgba(0,0,0,0.2);
-        }
-        .btn-main:active { top: 2px; box-shadow: 0 2px 0 rgba(0,0,0,0.2); }
-
         /* AREA DAFTAR LINK */
+        .section-header {
+            font-size: 14px;
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 5px;
+        }
+
         .link-list-container {
             flex-grow: 1; /* Mengisi sisa ruang */
             background: var(--input-bg);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 10px;
+            padding: 15px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 15px;
+            gap: 12px;
         }
 
         .link-item {
@@ -180,9 +169,15 @@
             align-items: center;
             background: var(--card-bg);
             border: 1px solid var(--border);
-            padding: 10px 12px;
+            padding: 12px 15px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .link-item:hover {
+            border-color: var(--primary);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .link-info {
@@ -194,15 +189,16 @@
 
         .link-title {
             font-weight: bold;
-            font-size: 15px;
+            font-size: 16px;
             color: var(--text);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            margin-bottom: 2px;
         }
 
         .link-url {
-            font-size: 11px;
+            font-size: 12px;
             color: var(--text);
             opacity: 0.7;
             white-space: nowrap;
@@ -214,8 +210,8 @@
             background: var(--primary);
             color: white;
             border: none;
-            width: 40px; /* Sesuai permintaan: Persegi */
-            height: 40px; /* Sesuai permintaan: Persegi */
+            width: 42px; 
+            height: 42px; 
             border-radius: 8px;
             cursor: pointer;
             display: flex;
@@ -229,12 +225,11 @@
             transform: translateY(2px);
             box-shadow: 0 1px 0 rgba(0,0,0,0.2);
         }
-
-        /* LOG PANEL */
-        .log-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .log-panel { background: var(--log-bg); border: 1px solid var(--border); height: 90px; flex-shrink: 0; padding: 10px; overflow-y: scroll; font-size: 11px; color: var(--log-text); border-radius: 8px; }
-        .log-entry { margin-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2px; }
-        .btn-mode { background: none; border: none; color: var(--primary); cursor: pointer; font-family: 'Share Tech', sans-serif; font-size: 11px; text-decoration: underline; padding: 0;}
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-body); border-radius: 8px; }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 8px; }
     </style>
 </head>
 <body class="light-clean">
@@ -253,6 +248,10 @@
                 </div>
 
                 <div class="nav-actions">
+                    <a href="https://lynk.id/isaproject/0581ez0729vx" target="_blank" class="btn-nav-icon" style="background: #6f4e37;" title="Support Me">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+                    </a>
+
                     <div style="position: relative;">
                         <button class="btn-nav-icon" onclick="toggleThemeMenu()">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -266,66 +265,76 @@
                         <div id="themeMenu" class="theme-menu">
                             <div class="theme-opt" onclick="setTheme('light-clean')">LIGHT CLEAN</div>
                             <div class="theme-opt" onclick="setTheme('luxury-gold')">LUXURY GOLD</div>
-                            <div class="theme-opt" onclick="setTheme('cyberpunk')">CYBERPUNK</div>
+                            <div class="theme-opt" onclick="setTheme('dark-pro')">DARK PRO</div>
                             <div class="theme-opt" onclick="setTheme('midnight-navy')">MIDNIGHT NAVY</div>
+                            <div class="theme-opt" onclick="setTheme('ocean-breeze')">OCEAN BREEZE</div>
+                            <div class="theme-opt" onclick="setTheme('cyberpunk')">CYBERPUNK</div>
+                            <div class="theme-opt" onclick="setTheme('deep-forest')">DEEP FOREST</div>
+                            <div class="theme-opt" onclick="setTheme('deep-ocean')">DEEP OCEAN</div>
+                            <div class="theme-opt" onclick="setTheme('sunset-vibes')">SUNSET VIBES</div>
+                            <div class="theme-opt" onclick="setTheme('warm-coffee')">WARM COFFEE</div>
+                            <div class="theme-opt" onclick="setTheme('retro-paper')">RETRO PAPER</div>
+                            <div class="theme-opt" onclick="setTheme('dracula')">DRACULA</div>
+                            <div class="theme-opt" onclick="setTheme('ultra-minimal')">ULTRA MINIMAL</div>
+                            <div class="theme-opt" onclick="setTheme('rose-valentine')">ROSE VALENTINE</div>
+                            <div class="theme-opt" onclick="setTheme('violet-night')">VIOLET NIGHT</div>
+                            <div class="theme-opt" onclick="setTheme('sunset-glow')">SUNSET GLOW</div>
+                            <div class="theme-opt" onclick="setTheme('slate-grey')">SLATE GREY</div>
+                            <div class="theme-opt" onclick="setTheme('emerald-city')">EMERALD CITY</div>
                             <div class="theme-opt" onclick="setTheme('vaporwave')">VAPORWAVE</div>
-                            </div>
+                            <div class="theme-opt" onclick="setTheme('pastel-dream')">PASTEL DREAM</div>
+                            <div class="theme-opt" onclick="setTheme('neon-lime')">NEON LIME</div>
+                            <div class="theme-opt" onclick="setTheme('royal-purple')">ROYAL PURPLE</div>
+                            <div class="theme-opt" onclick="setTheme('burning-orange')">BURNING ORANGE</div>
+                            <div class="theme-opt" onclick="setTheme('arctic-white')">ARCTIC WHITE</div>
+                            <div class="theme-opt" onclick="setTheme('sweet-candy')">SWEET CANDY</div>
+                            <div class="theme-opt" onclick="setTheme('military-base')">MILITARY BASE</div>
+                            <div class="theme-opt" onclick="setTheme('deep-space')">DEEP SPACE</div>
+                            <div class="theme-opt" onclick="setTheme('mint-fresh')">MINT FRESH</div>
+                            <div class="theme-opt" onclick="setTheme('volcano-ash')">VOLCANO ASH</div>
+                            <div class="theme-opt" onclick="setTheme('electric-blue')">ELECTRIC BLUE</div>
+                            <div class="theme-opt" onclick="setTheme('soft-lavender')">SOFT LAVENDER</div>
+                            <div class="theme-opt" onclick="setTheme('forest-moss')">FOREST MOSS</div>
+                            <div class="theme-opt" onclick="setTheme('nordic-frost')">NORDIC FROST</div>
+                            <div class="theme-opt" onclick="setTheme('industrial-rust')">INDUSTRIAL RUST</div>
+                            <div class="theme-opt" onclick="setTheme('sakura-night')">SAKURA NIGHT</div>
+                            <div class="theme-opt" onclick="setTheme('toxic-neon')">TOXIC NEON</div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div style="display: flex; gap: 10px;">
-                <div class="input-group" style="flex: 1;">
-                    <label>Nama Link</label>
-                    <input type="text" id="inputName" class="input-field" placeholder="Contoh: Web Refornam">
-                </div>
-                <div class="input-group" style="flex: 2;">
-                    <label>URL / Tautan</label>
-                    <input type="url" id="inputUrl" class="input-field" placeholder="https://contoh.com/">
-                </div>
-            </div>
-
-            <div class="action-bars">
-                <button class="btn-main" onclick="addLink()">SIMPAN LINK</button>
-            </div>
-
-            <div class="log-header">
-                <label>Daftar Tersimpan</label>
-            </div>
+            <div class="section-header">Aplikasi & Tautan Tersimpan</div>
             
             <div id="linkContainer" class="link-list-container">
                 </div>
 
-            <div class="log-header">
-                <label style="font-size: 13px; color: var(--primary); font-weight: bold;">Activity Log</label>
-                <div style="display: flex; gap: 10px;">
-                    <button onclick="clearLogs()" class="btn-mode">CLEAR LOGS</button>
-                </div>
-            </div>
-            <div id="logPanel" class="log-panel"><div class="log-entry">System ready...</div></div>
         </div>
     </div>
 
 <script>
-    // Menyimpan data link awal sesuai contoh yang diberikan
-    let savedLinks = [
+    // ==========================================
+    // MASUKKAN DAFTAR LINK ANDA DI SINI
+    // ==========================================
+    const savedLinks = [
         {
             name: "Refornam App",
             url: "https://refornam.vercel.app/"
-        }
+        },
     ];
+    // ==========================================
 
     // Fungsi Render Daftar Link
     function renderLinks() {
         const container = document.getElementById('linkContainer');
-        container.innerHTML = ''; // Kosongkan div terlebih dahulu
+        container.innerHTML = ''; 
 
         if(savedLinks.length === 0) {
-            container.innerHTML = `<div style="text-align:center; opacity:0.5; padding: 20px 0; font-size:14px;">Belum ada tautan yang disimpan.</div>`;
+            container.innerHTML = `<div style="text-align:center; opacity:0.5; padding: 20px 0; font-size:14px;">Belum ada tautan yang disimpan di dalam script.</div>`;
             return;
         }
 
-        savedLinks.forEach((item, index) => {
+        savedLinks.forEach((item) => {
             const html = `
                 <div class="link-item">
                     <div class="link-info">
@@ -333,7 +342,7 @@
                         <div class="link-url">${item.url}</div>
                     </div>
                     <button class="btn-open" onclick="openLink('${item.url}')" title="Buka Tautan">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                             <polyline points="15 3 21 3 21 9"></polyline>
                             <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -345,41 +354,12 @@
         });
     }
 
-    // Fungsi Tambah Link
-    function addLink() {
-        const nameInput = document.getElementById('inputName');
-        const urlInput = document.getElementById('inputUrl');
-        
-        const nameVal = nameInput.value.trim();
-        let urlVal = urlInput.value.trim();
-
-        if(!nameVal || !urlVal) {
-            alert("Harap isi nama dan URL tautan terlebih dahulu!");
-            return;
-        }
-
-        // Validasi basic URL, pastikan ada http/https
-        if (!urlVal.startsWith('http://') && !urlVal.startsWith('https://')) {
-            urlVal = 'https://' + urlVal;
-        }
-
-        savedLinks.push({ name: nameVal, url: urlVal });
-        
-        // Reset input
-        nameInput.value = '';
-        urlInput.value = '';
-        
-        renderLinks();
-        addLog(`Link disimpan: ${nameVal}`);
-    }
-
     // Fungsi Buka Link
     function openLink(url) {
         window.open(url, '_blank');
-        addLog(`Membuka tautan: ${url}`);
     }
 
-    // Fungsi UI & Utilitas Bawaan (Tema, Jam, Log)
+    // Fungsi Tema
     function toggleThemeMenu() { 
         const m = document.getElementById('themeMenu'); 
         m.style.display = m.style.display === 'flex' ? 'none' : 'flex'; 
@@ -388,20 +368,9 @@
     function setTheme(t) { 
         document.body.className = t; 
         document.getElementById('themeMenu').style.display = 'none'; 
-        addLog(`Theme set: ${t.toUpperCase()}`); 
     }
 
-    function addLog(m) { 
-        const p = document.getElementById('logPanel'); 
-        const t = new Date().toLocaleTimeString(); 
-        p.innerHTML += `<div class="log-entry"><span>[${t}]</span> ${m}</div>`; 
-        p.scrollTop = p.scrollHeight; 
-    }
-    
-    function clearLogs() { 
-        document.getElementById('logPanel').innerHTML = ''; 
-    }
-
+    // Fungsi Jam Real-time
     function updateClock() {
         const now = new Date();
         const h = String(now.getHours()).padStart(2, '0');
@@ -414,10 +383,19 @@
         document.getElementById('date').textContent = `${dd}/${mm}/${yyyy}`;
     }
 
+    // Event Listener untuk menutup menu tema jika diklik di luar area
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('themeMenu');
+        const navActions = document.querySelector('.nav-actions');
+        if (menu.style.display === 'flex' && !navActions.contains(event.target)) {
+            menu.style.display = 'none';
+        }
+    });
+
     // Inisialisasi awal
     setInterval(updateClock, 1000);
     updateClock();
-    renderLinks(); // Menampilkan link default saat halaman dimuat
+    renderLinks(); 
 
 </script>
 </body>
