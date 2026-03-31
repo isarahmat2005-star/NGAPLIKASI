@@ -62,29 +62,14 @@
             background-size: 20px 20px;
             color: var(--text);
             display: flex;
-            flex-direction: column; /* Mengubah arah flex menjadi kolom untuk menampung tali */
+            justify-content: center;
             align-items: center;
             min-height: 100dvh;
             margin: 0;
-            padding: 0 15px 15px 15px; /* Menghapus padding atas agar tali bisa nempel ke atas */
+            padding: 15px;
             box-sizing: border-box;
             transition: all 0.3s ease;
             overflow-x: hidden;
-            position: relative; /* Untuk memposisikan tali relatif terhadap body */
-        }
-
-        /* --- DESAIN TALI LANYARD --- */
-        .lanyard {
-            width: 15px; /* Lebar tali */
-            background-color: var(--text); /* Warna tali mengikuti teks agar kontras */
-            height: 15vh; /* Panjang tali dari atas layar */
-            min-height: 50px; /* Panjang minimal tali */
-            border-bottom-left-radius: 5px;
-            border-bottom-right-radius: 5px;
-            position: relative;
-            z-index: 4; /* Di bawah container */
-            margin-bottom: -15px; /* Menarik container agar terlihat terkait dengan tali */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2) inset; /* Efek kedalaman pada tali */
         }
 
         .main-wrapper {
@@ -93,14 +78,41 @@
             align-items: center;
             width: 100%;
             max-width: 600px;
-            position: relative; /* Penting untuk lubang gantungan */
-            z-index: 5; /* Di atas tali */
+            position: relative;
+        }
+
+        /* --- DESAIN FOLDER TAB UNTUK JUDUL --- */
+        .title-tab {
+            background-color: var(--card-bg);
+            padding: 10px 30px;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            border: 2px solid var(--border);
+            border-bottom: none; /* Menghilangkan border bawah agar menyatu dengan container */
+            box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.05); /* Bayangan hanya di atas */
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            position: relative;
+            margin-bottom: -2px; /* Menarik container ke atas agar border menumpuk dan menyatu */
+            align-self: center; /* Memastikan tab berada di tengah horizontal */
+        }
+
+        .title-tab h1 {
+            margin: 0;
+            color: var(--primary);
+            font-size: 32px;
+            font-weight: 1000;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            line-height: 1;
         }
 
         .container {
             background-color: var(--card-bg);
             width: 100%;
-            height: 615px;
+            height: 615px; /* Tinggi dikembalikan seperti semula */
             padding: 25px;
             border-radius: 12px;
             border: 2px solid var(--border);
@@ -109,64 +121,10 @@
             flex-direction: column;
             box-sizing: border-box;
             position: relative;
+            z-index: 5;
         }
 
-        /* --- LUBANG GANTUNGAN (ID CARD HOLE) --- */
-        .id-hole-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            margin-bottom: 20px; /* Jarak antara lubang dan konten di bawahnya */
-            margin-top: -10px; /* Menarik ke atas sedikit mendekati tepi atas container */
-        }
-
-        .id-hole {
-            width: 60px; /* Lebar lubang pil */
-            height: 15px; /* Tinggi lubang */
-            background-color: var(--bg-body); /* Warna bagian dalam lubang sama dengan background luar */
-            border-radius: 20px; /* Membuat bentuk pil */
-            border: 2px solid var(--primary); /* Pinggiran lubang menggunakan warna utama */
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* Bayangan dalam memberi efek lubang nyata */
-            position: relative;
-        }
-
-        /* Tali clip yang mengait ke lubang */
-        .clip {
-            position: absolute;
-            top: -15px; /* Menggantung dari tali di atasnya */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 25px;
-            height: 25px;
-            border: 3px solid var(--text);
-            border-radius: 5px;
-            z-index: 3;
-            clip-path: polygon(0% 0%, 100% 0%, 100% 70%, 70% 100%, 30% 100%, 0% 70%); /* Bentuk jepitan sederhana */
-        }
-
-
-        .header-area {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
-        }
-
-        /* Judul yang sudah disatukan */
-        .app-title {
-            margin: 0;
-            color: var(--primary);
-            font-size: 32px; /* Disesuaikan agar muat sebaris */
-            font-weight: 1000;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            line-height: 1;
-        }
-
-        .top-nav { display: flex; justify-content: space-between; align-items: center; }
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .nav-actions { display: flex; gap: 10px; align-items: center; position: relative; }
 
         .btn-nav-icon {
@@ -281,27 +239,18 @@
 </head>
 <body class="light-clean">
 
-    <div class="lanyard"></div>
-
     <div class="main-wrapper">
-        <div class="container">
-            <div class="id-hole-container">
-                 <div class="clip"></div>
-                <div class="id-hole"></div>
-            </div>
+        
+        <div class="title-tab">
+            <h1>NGAPLIKASI</h1>
+        </div>
 
-            <div class="header-area">
-                <div>
-                    <h1 class="app-title">NGAPLIKASI</h1>
-                </div>
-                 <div id="datetime" style="text-align: right; line-height: 1.2;">
+        <div class="container">
+            <div class="top-nav">
+                 <div id="datetime" style="text-align: left; line-height: 1.2;">
                     <div id="clock" style="font-size: 22px; font-weight: bold; color: var(--text);">00:00:00</div>
                     <div id="date" style="font-size: 13px; color: var(--text); opacity: 0.8; font-weight: bold;">00/00/0000</div>
                 </div>
-            </div>
-
-            <div class="top-nav">
-                <div></div>
 
                 <div class="nav-actions">
                     <a href="https://lynk.id/isaproject/0581ez0729vx" target="_blank" class="btn-nav-icon" style="background: #6f4e37;" title="Support Me">
