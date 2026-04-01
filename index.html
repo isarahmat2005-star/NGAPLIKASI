@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>COLINKS by IRS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #2563eb;
@@ -88,44 +88,80 @@
             transition: opacity 0.5s ease, transform 0.5s ease;
         }
 
-        /* --- ANIMASI SVG PREMIUM (SECURITY DRONE) --- */
+        /* --- ANIMASI QUANTUM SPHERE --- */
         .anim-container {
-            width: 220px;
-            height: 160px;
+            width: 280px;  /* Ukuran optimal di atas kotak passcode */
+            height: 280px;
             margin-bottom: -15px; 
             position: relative;
             z-index: 2;
         }
-        .svg-character { width: 100%; height: 100%; overflow: visible; }
-        
-        /* Elements */
-        #drone-head { transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), fill 0.3s; }
-        #drone-screen { fill: #000; stroke: var(--primary); stroke-width: 2; transition: stroke 0.3s; }
-        .led-eye { fill: var(--primary); transition: opacity 0.3s, fill 0.3s; }
-        #led-scan { animation: scanning 2s infinite ease-in-out; }
-        #led-angry, #led-happy { opacity: 0; }
-        #msg-popup { opacity: 0; transition: opacity 0.3s, transform 0.3s; transform: translateY(10px); }
 
-        /* Animations */
-        @keyframes scanning { 0%, 100% { transform: translateX(-20px); } 50% { transform: translateX(20px); } }
-        @keyframes drone-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        /* Keyframes Rotasi Geometri Kuantum */
+        @keyframes spin-cw { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes spin-ccw { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+        @keyframes hover-float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
+        @keyframes glitch-shake {
+            0%, 100% { transform: translate(0, 0); }
+            20% { transform: translate(-3px, 2px); }
+            40% { transform: translate(3px, -2px); }
+            60% { transform: translate(-2px, -3px); }
+            80% { transform: translate(2px, 3px); }
+        }
 
-        /* States */
-        .state-idle #drone-head { transform: translateY(60px); animation: drone-bob 3s infinite ease-in-out; }
-        
-        .state-error #drone-head { transform: translateY(15px) scale(1.1); }
-        .state-error #drone-screen { stroke: var(--danger); }
-        .state-error #led-scan { opacity: 0; }
-        .state-error #led-angry { opacity: 1; fill: var(--danger); }
-        .state-error #msg-popup { opacity: 1; transform: translateY(0); }
-        .state-error.shake { animation: shakeBox 0.4s ease-in-out; }
+        /* Kelas Transisi Kuantum Dasar */
+        .color-sync { transition: stroke 0.5s ease, fill 0.5s ease, opacity 0.5s ease; }
+        .opacity-sync { transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-origin: 960px 480px; }
+        .scale-sync { transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1); transform-origin: 960px 480px; }
 
-        .state-success #drone-head { transform: translateY(15px); }
-        .state-success #drone-screen { stroke: var(--success); }
-        .state-success #led-scan { opacity: 0; }
-        .state-success #led-happy { opacity: 1; fill: var(--success); }
+        .ring-1 { animation: spin-cw 25s linear infinite; transform-origin: 960px 480px; }
+        .ring-2 { animation: spin-ccw 20s linear infinite; transform-origin: 960px 480px; }
+        .ring-3 { animation: spin-cw 12s linear infinite; transform-origin: 960px 480px; }
+        .machine-hover { animation: hover-float 6s ease-in-out infinite; transform-origin: 960px 540px; }
 
-        @keyframes shakeBox { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
+        /* Teks Kuantum Anti-Cacat */
+        .status-text {
+            font-size: 52px;
+            font-weight: bold;
+            letter-spacing: 6px;
+            font-family: 'Share Tech Mono', monospace, sans-serif;
+            text-shadow: 0px 4px 10px rgba(0,0,0,0.5); 
+        }
+
+        /* == LOGIKA STATE 1: IDLE (Mengikuti Warna Primer Tema) == */
+        .state-idle .theme-color { stroke: var(--primary); }
+        .state-idle .theme-fill { fill: var(--primary); }
+        .state-idle .aura-glow { fill: var(--primary); opacity: 0.1; }
+        .state-idle .scale-1, .state-idle .scale-2, .state-idle .scale-3 { transform: scale(1); }
+        .state-idle .ui-idle { opacity: 1; transform: scale(1); }
+        .state-idle .ui-angry, .state-idle .ui-happy { opacity: 0; transform: scale(0.5); }
+
+        /* == LOGIKA STATE 2: ANGRY (Menggunakan Warna Merah/Bahaya) == */
+        .state-angry .machine-hover { animation: glitch-shake 0.15s infinite; }
+        .state-angry .theme-color { stroke: var(--danger); }
+        .state-angry .theme-fill { fill: var(--danger); }
+        .state-angry .aura-glow { fill: var(--danger); opacity: 0.15; }
+        .state-angry .scale-1 { transform: scale(0.9); }
+        .state-angry .scale-2 { transform: scale(0.85); }
+        .state-angry .scale-3 { transform: scale(0.8); }
+        .state-angry .ring-1 { animation: spin-cw 4s linear infinite; }
+        .state-angry .ring-2 { animation: spin-ccw 3s linear infinite; }
+        .state-angry .ring-3 { animation: spin-cw 2s linear infinite; }
+        .state-angry .ui-angry { opacity: 1; transform: scale(1.1); }
+        .state-angry .ui-idle, .state-angry .ui-happy { opacity: 0; transform: scale(0.5); }
+
+        /* == LOGIKA STATE 3: HAPPY (Menggunakan Warna Hijau/Sukses) == */
+        .state-happy .theme-color { stroke: var(--success); } 
+        .state-happy .theme-fill { fill: var(--success); }
+        .state-happy .aura-glow { fill: var(--success); opacity: 0.15; }
+        .state-happy .scale-1 { transform: scale(1.15); opacity: 0.6; }
+        .state-happy .scale-2 { transform: scale(1.2); opacity: 0.4; }
+        .state-happy .scale-3 { transform: scale(1.25); opacity: 0.2; }
+        .state-happy .ring-1 { animation: spin-cw 30s linear infinite; }
+        .state-happy .ring-2 { animation: spin-ccw 25s linear infinite; }
+        .state-happy .ring-3 { animation: spin-cw 20s linear infinite; }
+        .state-happy .ui-happy { opacity: 1; transform: scale(1.2); }
+        .state-happy .ui-idle, .state-happy .ui-angry { opacity: 0; transform: scale(0.5); }
 
         /* --- KOTAK INPUT --- */
         .passcode-box {
@@ -144,14 +180,14 @@
             box-sizing: border-box;
         }
         
-        .box-title { text-align: center; color: var(--primary); margin: 0 0 5px 0; font-size: 24px; letter-spacing: 2px; text-transform: uppercase; }
+        .box-title { text-align: center; color: var(--primary); margin: 0 0 5px 0; font-size: 24px; letter-spacing: 2px; text-transform: uppercase; transition: color 0.3s;}
 
         .passcode-input {
             width: 100%; padding: 12px; background: var(--input-bg); border: 2px solid var(--border);
             color: var(--text); font-family: 'Share Tech', sans-serif; font-size: 16px; text-align: center; 
             border-radius: 0; box-sizing: border-box; outline: none; transition: all 0.3s; height: 45px;
         }
-        .passcode-input:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--primary); }
+        .passcode-input:focus { border-color: var(--primary); box-shadow: 0 0 10px var(--grid-color); }
         
         .btn-passcode {
             background: var(--primary); color: white; border: none; padding: 12px; font-size: 16px; height: 45px;
@@ -162,7 +198,7 @@
 
         /* --- APLIKASI UTAMA --- */
         #mainApp {
-            display: none; /* Dikelola JS */
+            display: none;
             flex-direction: column;
             align-items: center;
             width: 100%;
@@ -249,40 +285,81 @@
 <body class="light-clean">
 
     <div id="lockScreen" class="lock-screen">
+        
         <div class="anim-container">
-            <svg viewBox="0 0 200 160" class="svg-character state-idle" id="svgAnim">
-                <g id="msg-popup">
-                    <rect x="50" y="5" width="100" height="30" fill="var(--danger)" stroke="white" stroke-width="2"/>
-                    <text x="100" y="25" text-anchor="middle" fill="white" font-family="Share Tech" font-size="14" font-weight="bold">KAMU SIAPA?!</text>
-                </g>
-                
-                <g id="drone-head">
-                    <path id="drone-shell" d="M40,80 L60,40 L140,40 L160,80 L140,120 L60,120 Z" fill="var(--card-bg)" stroke="var(--primary)" stroke-width="4"/>
-                    <path id="drone-screen" d="M55,80 L65,55 L135,55 L145,80 L135,105 L65,105 Z" fill="#111"/>
-                    
-                    <g id="led-eyes">
-                        <rect id="led-scan" class="led-eye" x="90" y="77" width="20" height="6"/>
-                        
-                        <g id="led-angry" class="led-eye">
-                            <line x1="70" y1="70" x2="90" y2="90" stroke="currentColor" stroke-width="4"/>
-                            <line x1="90" y1="70" x2="70" y2="90" stroke="currentColor" stroke-width="4"/>
-                            <line x1="110" y1="70" x2="130" y2="90" stroke="currentColor" stroke-width="4"/>
-                            <line x1="130" y1="70" x2="110" y2="90" stroke="currentColor" stroke-width="4"/>
+            <svg viewBox="600 120 720 720" style="width: 100%; height: 100%;" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="6" result="blur" />
+                        <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+                    </filter>
+                    <filter id="aura-blur" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="30" />
+                    </filter>
+                </defs>
+
+                <g id="quantumMaster" class="state-idle">
+                    <g class="machine-hover">
+
+                        <circle cx="960" cy="480" r="220" class="color-sync aura-glow" filter="url(#aura-blur)" />
+
+                        <g class="scale-sync scale-1">
+                            <g class="ring-1">
+                                <circle cx="960" cy="480" r="240" fill="none" class="color-sync theme-color" stroke-width="2" stroke-dasharray="2 12" opacity="0.4" />
+                                <circle cx="960" cy="480" r="240" fill="none" class="color-sync theme-color" stroke-width="4" stroke-dasharray="150 400 50 300" filter="url(#neon-glow)" />
+                                <circle cx="960" cy="240" r="8" class="color-sync theme-fill" filter="url(#neon-glow)" />
+                                <circle cx="960" cy="720" r="8" class="color-sync theme-fill" filter="url(#neon-glow)" />
+                            </g>
                         </g>
 
-                        <g id="led-happy" class="led-eye" fill="none" stroke="currentColor" stroke-width="4">
-                            <polyline points="70,85 80,70 90,85"/>
-                            <polyline points="110,85 120,70 130,85"/>
+                        <g class="scale-sync scale-2">
+                            <g class="ring-2">
+                                <circle cx="960" cy="480" r="180" fill="none" class="color-sync theme-color" stroke-width="1" opacity="0.3" />
+                                <path d="M 830 350 A 180 180 0 0 1 1090 350 M 830 610 A 180 180 0 0 0 1090 610" fill="none" class="color-sync theme-color" stroke-width="6" stroke-linecap="square" filter="url(#neon-glow)" />
+                                <path d="M 780 480 L 810 480 M 1110 480 L 1140 480 M 960 300 L 960 330 M 960 630 L 960 660" class="color-sync theme-color" stroke-width="3" opacity="0.8" />
+                            </g>
                         </g>
+
+                        <g class="scale-sync scale-3">
+                            <g class="ring-3">
+                                <circle cx="960" cy="480" r="120" fill="none" class="color-sync theme-color" stroke-width="15" stroke-dasharray="5 15 2 10 30 10" opacity="0.7" filter="url(#neon-glow)" />
+                            </g>
+                        </g>
+
+                        <g class="scale-sync scale-3">
+                            <circle cx="960" cy="480" r="85" fill="#080f1a" class="color-sync theme-color" stroke-width="3" />
+                            
+                            <g class="opacity-sync ui-idle">
+                                <rect x="940" y="475" width="40" height="28" rx="4" fill="none" class="color-sync theme-color" stroke-width="4" />
+                                <path d="M 948 475 V 460 A 12 12 0 0 1 972 460 V 475" fill="none" class="color-sync theme-color" stroke-width="4" stroke-linecap="round" />
+                                <circle cx="960" cy="489" r="4" class="color-sync theme-fill" />
+                            </g>
+
+                            <g class="opacity-sync ui-angry">
+                                <path d="M 935 455 L 985 505 M 985 455 L 935 505" fill="none" class="color-sync theme-color" stroke-width="8" stroke-linecap="round" filter="url(#neon-glow)" />
+                            </g>
+
+                            <g class="opacity-sync ui-happy">
+                                <rect x="940" y="480" width="40" height="28" rx="4" fill="none" class="color-sync theme-color" stroke-width="4" opacity="0.3" />
+                                <path d="M 948 480 V 460 A 12 12 0 0 1 972 460" fill="none" class="color-sync theme-color" stroke-width="4" stroke-linecap="round" opacity="0.3" />
+                                <path d="M 935 480 L 955 500 L 990 450" fill="none" class="color-sync theme-color" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#neon-glow)" />
+                            </g>
+                        </g>
+
+                        <g transform="translate(0, 800)">
+                            <text x="960" y="0" text-anchor="middle" class="status-text opacity-sync ui-idle color-sync theme-fill">SECURED</text>
+                            <text x="960" y="0" text-anchor="middle" class="status-text opacity-sync ui-angry color-sync theme-fill">LOCKED</text>
+                            <text x="960" y="0" text-anchor="middle" class="status-text opacity-sync ui-happy color-sync theme-fill">UNLOCKED</text>
+                        </g>
+
                     </g>
                 </g>
-                <rect x="0" y="130" width="200" height="30" fill="var(--card-bg)" stroke="var(--border)" stroke-width="2"/>
             </svg>
         </div>
 
         <div class="passcode-box">
             <h2 class="box-title">BRANKAS</h2>
-            <input type="password" id="passcodeInput" class="passcode-input" placeholder="KODE RAHASIA" onkeypress="handleEnter(event)" onfocus="droneLookDown()" onblur="droneLookIdle()">
+            <input type="password" id="passcodeInput" class="passcode-input" placeholder="KODE RAHASIA" onkeypress="handleEnter(event)">
             <button class="btn-passcode" onclick="verifyCode()">MASUK</button>
         </div>
     </div>
@@ -379,25 +456,24 @@
 
     const lockScreen = document.getElementById('lockScreen');
     const mainApp = document.getElementById('mainApp');
-    const svgAnim = document.getElementById('svgAnim');
+    const quantumMaster = document.getElementById('quantumMaster'); // Master SVG Brankas
     const PASSCODE_CORRECT = '0.Rahasia.0';
 
-    // --- FIX: LOGIKA LOGIN & REFRESH ---
+    // --- LOGIKA LOGIN & REFRESH ---
     function checkLoginStatus() {
         const storedLogin = localStorage.getItem('colinks_auth');
         if (storedLogin) {
             const data = JSON.parse(storedLogin);
             if (new Date().getTime() < data.expiry) {
-                // Sesi valid, jangan tampilkan lockscreen sama sekali
+                // Sesi valid, langsung masuk
                 lockScreen.style.display = 'none';
                 mainApp.style.display = 'flex';
                 mainApp.style.opacity = '1';
                 renderLinks();
-                updateExpiryTime(); // Refresh waktu reset ke besok
+                updateExpiryTime();
                 return;
             }
         }
-        // Jika tidak ada login atau expired
         lockScreen.style.display = 'flex';
     }
 
@@ -412,52 +488,46 @@
         localStorage.setItem('colinks_auth', JSON.stringify({ isLoggedIn: true, expiry: getNextMidnight() }));
     }
 
-    // Pengecekan aktifitas di jam 00:00
     setInterval(() => {
         if (localStorage.getItem('colinks_auth') && mainApp.style.display === 'flex') {
             updateExpiryTime();
         }
-    }, 300000); // 5 Menit sekali
+    }, 300000); 
 
-    // --- ANIMASI DRONE ---
-    function droneLookDown() { 
-        if(svgAnim.className.baseVal.includes('state-idle')) {
-            document.getElementById('drone-head').style.transform = 'translateY(55px) rotate(5deg)';
-        }
-    }
-    function droneLookIdle() {
-        if(svgAnim.className.baseVal.includes('state-idle')) {
-            document.getElementById('drone-head').style.transform = '';
-        }
-    }
-
+    // --- LOGIKA PENGECEKAN KODE RAHASIA & ANIMASI BRANKAS ---
     function verifyCode() {
         const val = document.getElementById('passcodeInput').value;
+        
         if(val === PASSCODE_CORRECT) {
             updateExpiryTime();
-            svgAnim.className.baseVal = "svg-character state-success";
+            quantumMaster.setAttribute('class', 'state-happy'); // Set animasi Sukses
+            
             setTimeout(() => {
                 lockScreen.style.opacity = '0';
                 lockScreen.style.transform = 'scale(1.1)';
+                
                 setTimeout(() => {
                     lockScreen.style.display = 'none';
                     mainApp.style.display = 'flex';
                     setTimeout(() => mainApp.style.opacity = '1', 50);
                     renderLinks();
+                    quantumMaster.setAttribute('class', 'state-idle'); // Kembalikan animasi ke normal untuk next time
                 }, 500);
-            }, 800);
+            }, 1200); // Waktu jeda membiarkan user melihat animasi "UNLOCKED"
+            
         } else {
-            svgAnim.className.baseVal = "svg-character state-error shake";
+            quantumMaster.setAttribute('class', 'state-angry'); // Set animasi Error
+            
             setTimeout(() => {
-                svgAnim.className.baseVal = "svg-character state-idle";
+                quantumMaster.setAttribute('class', 'state-idle');
                 document.getElementById('passcodeInput').value = '';
-            }, 1500);
+            }, 1500); // Tampil error 1.5 detik lalu kembali ke IDLE
         }
     }
 
     function handleEnter(e) { if (e.key === 'Enter') verifyCode(); }
 
-    // --- APP LOGIC ---
+    // --- APP LOGIC TABS ---
     let currentTab = 'materi';
     function switchTab(t) {
         currentTab = t;
@@ -492,7 +562,7 @@
 
     setInterval(updateClock, 1000);
     updateClock();
-    checkLoginStatus(); // Cek status saat startup
+    checkLoginStatus(); 
 </script>
 </body>
 </html>
