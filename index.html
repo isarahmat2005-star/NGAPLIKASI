@@ -62,15 +62,19 @@
             background-image: linear-gradient(var(--grid-color) 1px, transparent 1px), linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
             background-size: 20px 20px;
             color: var(--text);
+            
+            /* --- PENGATUR TENGAH PRESISI --- */
             display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh; 
+            flex-direction: column;  /* Menyusun isi secara vertikal */
+            justify-content: center; /* Membagi gap atas dan bawah sama rata */
+            align-items: center;     /* Membagi gap kiri dan kanan sama rata */
+            
+            height: 100vh;           /* Mengunci tinggi body tepat setinggi layar */
             margin: 0;
-            padding: 15px;
+            padding: 20px;           /* Gap minimal agar tidak menyentuh pinggir layar */
             box-sizing: border-box;
             transition: all 0.3s ease;
-            overflow: hidden;
+            overflow: hidden;        /* Gembok layar agar tidak bisa di-scroll */
         }
 
         /* --- LAYAR KUNCI (PASSCODE) --- */
@@ -205,7 +209,7 @@
             align-items: center;
             width: 100%;
             max-width: 600px;
-            height: calc(100vh - 30px);
+            height: auto;
             gap: 10px;
             position: relative;
             z-index: 5;
