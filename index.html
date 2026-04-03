@@ -63,17 +63,16 @@
             background-size: 20px 20px;
             color: var(--text);
             
-            /* --- PENGATUR TENGAH PRESISI --- */
+            /* --- PENGATUR GAP SEMPURNA DI KE-4 SISI --- */
             display: flex;
-            flex-direction: column;  /* Menyusun isi secara vertikal */
-            justify-content: center; /* Membagi gap atas dan bawah sama rata */
-            align-items: center;     /* Membagi gap kiri dan kanan sama rata */
-            
-            height: 100vh;           /* Mengunci tinggi body tepat setinggi layar */
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Bisa pakai 100dvh untuk hp modern */
+            height: 100dvh;
             margin: 0;
-            padding: 0;           /* Gap minimal agar tidak menyentuh pinggir layar */
+            padding: 15px; /* <--- INI GAP-NYA. Kiri, kanan, atas, bawah persis 20px! */
             box-sizing: border-box;
-            overflow: hidden;        /* Gembok layar agar tidak bisa di-scroll */
+            overflow: hidden; /* Gembok scroll luar */
         }
 
         /* --- LAYAR KUNCI (PASSCODE) --- */
@@ -104,7 +103,7 @@
         .anim-container {
             width: 280px;  
             height: 280px;
-            margin-bottom: 5px; /* Jarak antara animasi dan kartu passcode dipertahankan */
+            margin-bottom: 5px; 
             position: relative;
             z-index: 2;
         }
@@ -205,11 +204,9 @@
         #mainApp {
             display: none;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
             width: 100%;
+            height: 100%; /* Memaksa mengisi ruang yang tersisa setelah di-padding 20px */
             max-width: 600px;
-            height: auto;
             gap: 10px;
             margin: 0;
             position: relative;
@@ -224,15 +221,19 @@
             border-radius: 0; border: 2px solid var(--border);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             display: flex; justify-content: center; align-items: center;
+            flex-shrink: 0;
         }
         .title-card h1 { margin: 0; color: var(--primary); font-size: 50px; font-weight: 1000; letter-spacing: 8px; text-transform: uppercase; line-height: 1; }
 
         .container {
             background-color: var(--card-bg);
-            width: 100%; height: 590px; padding: 25px; margin: 0;
+            width: 100%; 
+            flex-grow: 1; /* Menyuruh kartu melar otomatis sampai batas bawah padding */
+            height: 0; /* Memberi ruang fleksibel, dijamin gap bawah selalu akurat */
+            padding: 25px; margin: 0;
             border-radius: 0; border: 2px solid var(--border);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            display: flex; flex-direction: column; box-sizing: border-box; position: relative; flex-shrink: 0;
+            display: flex; flex-direction: column; box-sizing: border-box; position: relative; 
             overflow: hidden;
         }
 
@@ -257,7 +258,7 @@
         .theme-opt:hover { background: var(--primary); color: white; }
 
         /* --- TABS --- */
-        .tab-container { position: relative; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; }
+        .tab-container { position: relative; display: flex; justify-content: center; align-items: center; margin-bottom: 15px; flex-shrink: 0; }
         .tab-line { position: absolute; width: 100%; height: 2px; background: var(--border); z-index: 0; }
         .tab-buttons { display: flex; gap: 10px; background: var(--card-bg); padding: 0 15px; z-index: 1; }
 
@@ -277,6 +278,7 @@
             display: flex; justify-content: space-between; align-items: center; background: var(--card-bg);
             border: 2px solid var(--border); padding: 12px 15px; border-radius: 0;
             box-shadow: 0 3px 0 var(--border); transition: all 0.2s ease;
+            flex-shrink: 0;
         }
         .link-item:hover { border-color: var(--primary); box-shadow: 0 3px 0 var(--primary); transform: translateY(-2px); }
         .link-info { display: flex; flex-direction: column; overflow: hidden; padding-right: 15px; }
@@ -586,5 +588,5 @@
     updateClock();
     checkLoginStatus(); 
 </script>
-</body>
+</body> 
 </html>
